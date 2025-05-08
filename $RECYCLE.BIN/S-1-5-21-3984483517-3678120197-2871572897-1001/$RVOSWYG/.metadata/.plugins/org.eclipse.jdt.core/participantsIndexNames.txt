@@ -1,3 +1,0 @@
-INDEX VERSION 1.134
-E:\WebProject\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3606367608.index
-\ProjectWebBanRau\src\main\java

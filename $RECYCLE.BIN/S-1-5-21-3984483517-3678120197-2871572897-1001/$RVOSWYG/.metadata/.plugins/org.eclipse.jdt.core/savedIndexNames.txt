@@ -1,4 +1,0 @@
-INDEX VERSION 1.134+E:\WebProject\.metadata\.plugins\org.eclipse.jdt.core
-2222457045.index
-1865797976.index
-2192702306.index
