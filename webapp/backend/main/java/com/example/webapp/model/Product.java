@@ -22,10 +22,10 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category; // Thay enum bằng quan hệ thực thể
+    private Category category;
 
     @Column(nullable = false)
     private Integer stockQuantity;
 
-    // Các trường khác...
+
 }
