@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.model.Product;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,15 @@ public class ProductController {
         Optional<Product> product = productService.getProductById(id);
         return product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Lọc lấy sản phẩm ngẫu nhiên
+    @GetMapping("/random")
+    public ResponseEntity<List<Product>> getRandomProducts(@RequestParam(defaultValue = "4") int limit) {
+        List<Product> products = productService.getRandomProducts(limit);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(products);
     }
 
     // Tìm kiếm sản phẩm theo tên
