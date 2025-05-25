@@ -4,7 +4,9 @@ import com.example.backend.model.Product;
 import com.example.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import com.example.backend.utils.VietnameseUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,6 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
     @Autowired
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -33,10 +34,15 @@ public class ProductService {
     public List<Product> searchProductsByName(String name) {
         return productRepository.findByTenspContainingIgnoreCase(name);
     }
-
+    // Lọc sản phẩm ngẫu nhiên
+    public List<Product> getRandomProducts(@Param("limit") int limit) {
+        return productRepository.findRandomProducts(limit);
+    }
     // Lọc sản phẩm theo danh mục
     public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory(category);
+        String normalized = VietnameseUtils.toUpperNoAccent(category);
+        System.out.println(">>> Lọc sản phẩm theo category: " + normalized);
+        return productRepository.findByCategory(normalized);
     }
 
     // Lọc sản phẩm theo khoảng giá
@@ -80,7 +86,7 @@ public class ProductService {
         product.setCategory(productDetails.getCategory());
         product.setPrice(productDetails.getPrice());
         product.setUnit(productDetails.getUnit());
-        product.setStock_quantity(productDetails.getStock_quantity());
+        product.setStockQuantity(productDetails.getStockQuantity()); // Sửa thành getStockQuantity()
 
         return productRepository.save(product);
     }

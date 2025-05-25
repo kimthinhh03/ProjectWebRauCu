@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Table(name = "chitietsanpham")
 @SecondaryTable(
         name = "sanpham",
-        pkJoinColumns = @PrimaryKeyJoinColumn(name = "masp")
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "masp", referencedColumnName = "masp")
 )
 public class Product implements Serializable {
 
@@ -22,6 +22,7 @@ public class Product implements Serializable {
     @Column(name = "masp")
     private String masp;
 
+    // Các thuộc tính từ secondary table (sanpham)
     @Column(name = "tensp", table = "sanpham")
     private String tensp;
 
@@ -34,17 +35,19 @@ public class Product implements Serializable {
     @Column(name = "mota", table = "sanpham")
     private String mota;
 
+    // Các thuộc tính từ primary table (chitietsanpham)
     @Column(name = "category")
     private String category;
 
     @Column(name = "price")
-    private Double price; // Sử dụng double vì price là numeric(10,2)
+    private Double price;
 
     @Column(name = "unit")
     private String unit;
 
     @Column(name = "stock_quantity")
-    private Integer stock_quantity;
+    private Integer stockQuantity;
+
 
     public Product() {
     }
