@@ -3,6 +3,8 @@ package com.example.backend.service;
 import com.example.backend.model.Product;
 import com.example.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -21,18 +23,17 @@ public class ProductService {
     }
 
     // Lấy tất cả sản phẩm
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
-
     // Lấy sản phẩm theo ID
     public Optional<Product> getProductById(String id) {
          return productRepository.findById(id);
     }
 
     // Tìm kiếm sản phẩm theo tên
-    public List<Product> searchProductsByName(String name) {
-        return productRepository.findByTenspContainingIgnoreCase(name);
+    public List<Product> searchByKeyword(String keyword) {
+        return productRepository.searchByProductName(keyword);
     }
     // Lọc sản phẩm ngẫu nhiên
     public List<Product> getRandomProducts(@Param("limit") int limit) {
@@ -74,22 +75,22 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    // Cập nhật sản phẩm
-    public Product updateProduct(String id, Product productDetails) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-
-        product.setTensp(productDetails.getTensp());
-        product.setHinhanh(productDetails.getHinhanh());
-        product.setNhacungcap(productDetails.getNhacungcap());
-        product.setMota(productDetails.getMota());
-        product.setCategory(productDetails.getCategory());
-        product.setPrice(productDetails.getPrice());
-        product.setUnit(productDetails.getUnit());
-        product.setStockQuantity(productDetails.getStockQuantity()); // Sửa thành getStockQuantity()
-
-        return productRepository.save(product);
-    }
+//    // Cập nhật sản phẩm
+//    public Product updateProduct(String id, Product productDetails) {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+//
+//        product.setTensp(productDetails.getTensp());
+//        product.setHinhanh(productDetails.getHinhanh());
+//        product.setNhacungcap(productDetails.getNhacungcap());
+//        product.setMota(productDetails.getMota());
+//        product.setCategory(productDetails.getCategory());
+//        product.setPrice(productDetails.getPrice());
+//        product.setUnit(productDetails.getUnit());
+//        product.setStockQuantity(productDetails.getStockQuantity()); // Sửa thành getStockQuantity()
+//
+//        return productRepository.save(product);
+//    }
 
     // Xóa sản phẩm
     public void deleteProduct(String id) {

@@ -1,6 +1,8 @@
 package com.example.backend.repository;
 
 import com.example.backend.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,9 +12,12 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
+    // Lấy tất cả sản phẩm
+    Page<Product> findAll(Pageable pageable);
 
     // Tìm kiếm sản phẩm theo tên (không phân biệt hoa thường)
-    List<Product> findByTenspContainingIgnoreCase(String name);
+    @Query("SELECT p FROM Product p WHERE LOWER(p.productDetail.tensp) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Product> searchByProductName(@Param("keyword") String keyword);
 
     // Lọc sản phẩm theo danh mục
     List<Product> findByCategory(String category);

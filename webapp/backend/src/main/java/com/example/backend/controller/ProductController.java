@@ -3,6 +3,9 @@ package com.example.backend.controller;
 import com.example.backend.model.Product;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,12 @@ public class ProductController {
 
     // Lấy tất cả sản phẩm
     @GetMapping("/all")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public Page<Product> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productService.getAllProducts(pageable);
     }
 
     // Lấy sản phẩm theo ID
@@ -46,8 +53,8 @@ public class ProductController {
 
     // Tìm kiếm sản phẩm theo tên
     @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String name) {
-        return productService.searchProductsByName(name);
+    public List<Product> searchProducts(@RequestParam String keyword) {
+        return productService.searchByKeyword(keyword);
     }
 
     // Lọc sản phẩm theo danh mục
@@ -82,15 +89,15 @@ public class ProductController {
         return productService.addProduct(product);
     }
 
-    // Cập nhật sản phẩm
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(
-            @PathVariable String id,
-            @RequestBody Product productDetails) {
-
-        Product updatedProduct = productService.updateProduct(id, productDetails);
-        return ResponseEntity.ok(updatedProduct);
-    }
+//    // Cập nhật sản phẩm
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Product> updateProduct(
+//            @PathVariable String id,
+//            @RequestBody Product productDetails) {
+//
+//        Product updatedProduct = productService.updateProduct(id, productDetails);
+//        return ResponseEntity.ok(updatedProduct);
+//    }
 
     // Xóa sản phẩm
     @DeleteMapping("/{id}")
