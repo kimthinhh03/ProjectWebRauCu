@@ -1,41 +1,22 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "chitietsanpham")
-@SecondaryTable(
-        name = "sanpham",
-        pkJoinColumns = @PrimaryKeyJoinColumn(name = "masp", referencedColumnName = "masp")
-)
 public class Product implements Serializable {
 
     @Id
     @Column(name = "masp")
     private String masp;
 
-    // Các thuộc tính từ secondary table (sanpham)
-    @Column(name = "tensp", table = "sanpham")
-    private String tensp;
-
-    @Column(name = "hinhanh", table = "sanpham")
-    private String hinhanh;
-
-    @Column(name = "nhacungcap", table = "sanpham")
-    private String nhacungcap;
-
-    @Column(name = "mota", table = "sanpham")
-    private String mota;
-
-    // Các thuộc tính từ primary table (chitietsanpham)
     @Column(name = "category")
     private String category;
 
@@ -46,9 +27,10 @@ public class Product implements Serializable {
     private String unit;
 
     @Column(name = "stock_quantity")
-    private Integer stockQuantity;
+    private Integer stock_quantity;
 
-
-    public Product() {
-    }
+    // Liên kết với bảng sanpham
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "masp", referencedColumnName = "masp", insertable = false, updatable = false)
+    private ProductDetail productDetail;
 }

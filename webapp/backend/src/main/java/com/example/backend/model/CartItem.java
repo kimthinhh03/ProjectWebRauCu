@@ -1,79 +1,35 @@
 //package com.example.backend.model;
 //
 //import jakarta.persistence.*;
+//import lombok.AllArgsConstructor;
+//import lombok.Getter;
+//import lombok.Setter;
+//
 //import java.io.Serializable;
 //
+//@Getter
+//@Setter
+//@AllArgsConstructor
 //@Entity
-//@Table(name = "CTSANPHAM")
+//@Table(name = "chitietsanpham")
 //public class CartItem implements Serializable {
 //
 //    @Id
-//    @Column(name = "MaSP")
-//    private String maSP;
+//    @Column(name = "masp")
+//    private String masp;
 //
-//    @Column(name = "LoaiSP")
-//    private String typeProduct;
+//    @Column(name = "category")
+//    private String category;
 //
-//    @Column(name = "Gia")
-//    private long price;
+//    @Column(name = "price")
+//    private Double price;
 //
-//    @Column(name = "DonViTinh")
+//    @Column(name = "unit")
 //    private String unit;
 //
-//    @Column(name = "Soluong")
-//    private int quantity;
+//    @Column(name = "stock_quantity")
+//    private Integer stock_quantity;
 //
 //    public CartItem() {}
 //
-//    public CartItem(String maSP, String typeProduct, long price, String unit, int quantity) {
-//        this.maSP = maSP;
-//        this.typeProduct = typeProduct;
-//        this.price = price;
-//        this.unit = unit;
-//        this.quantity = quantity;
-//    }
-//
-//    public String getMaSP() {
-//        return maSP;
-//    }
-//
-//    public void setMaSP(String maSP) {
-//        this.maSP = maSP;
-//    }
-//
-//    public String getTypeProduct() {
-//        return typeProduct;
-//    }
-//
-//    public void setTypeProduct(String typeProduct) {
-//        this.typeProduct = typeProduct;
-//    }
-//
-//    public long getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(long price) {
-//        this.price = price;
-//    }
-//
-//    public String getUnit() {
-//        return unit;
-//    }
-//
-//    public void setUnit(String unit) {
-//        this.unit = unit;
-//    }
-//
-//    public int getQuantity() {
-//        return quantity;
-//    }
-//
-//    public void setQuantity(int quantity) {
-//        this.quantity = quantity;
-//    }
-//
-//    public long getTotalMoney() {
-//        return price * quantity;
-//    }
 //}
