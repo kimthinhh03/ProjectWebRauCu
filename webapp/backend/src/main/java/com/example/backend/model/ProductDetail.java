@@ -15,7 +15,7 @@ public class ProductDetail {
     @Column(name = "masp")
     private String masp;
 
-    @Column(name = "tensp")
+    @Transient
     private String tensp;
 
     @Column(name = "hinhanh")

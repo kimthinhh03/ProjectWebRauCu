@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -28,59 +29,79 @@ public class ProductController {
     @GetMapping("/all")
     public Page<Product> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "vi") String lang
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return productService.getAllProducts(pageable);
+        return productService.getAllProducts(pageable, lang);
     }
 
     // Lấy sản phẩm theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable String id) {
-        Optional<Product> product = productService.getProductById(id);
+    public ResponseEntity<Product> getProductById(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        Optional<Product> product = productService.getProductById(id, lang);
         return product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Lọc lấy sản phẩm ngẫu nhiên
     @GetMapping("/random")
-    public ResponseEntity<List<Product>> getRandomProducts(@RequestParam(defaultValue = "4") int limit) {
-        List<Product> products = productService.getRandomProducts(limit);
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(products);
+    public ResponseEntity<List<Product>> getRandomProducts(
+            @RequestParam(defaultValue = "4") int limit,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        List<Product> products = productService.getRandomProducts(limit, lang);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(products);
     }
 
     // Tìm kiếm sản phẩm theo tên
     @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String keyword) {
-        return productService.searchByKeyword(keyword);
+    public List<Product> searchProducts(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        return productService.searchByKeyword(keyword, lang);
     }
 
     // Lọc sản phẩm theo danh mục
     @GetMapping("/category/{category}")
-    public List<Product> getProductsByCategory(@PathVariable String category) {
-        return productService.getProductsByCategory(category);
+    public List<Product> getProductsByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        return productService.getProductsByCategory(category, lang);
     }
 
     // Lọc sản phẩm theo khoảng giá
     @GetMapping("/filter")
     public List<Product> filterProductsByPrice(
             @RequestParam long minPrice,
-            @RequestParam long maxPrice) {
-        return productService.filterProductsByPriceRange(minPrice, maxPrice);
+            @RequestParam long maxPrice,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        return productService.filterProductsByPriceRange(minPrice, maxPrice, lang);
     }
+
 
     // Sắp xếp sản phẩm theo tên
     @GetMapping("/sort/name")
-    public List<Product> sortProductsByName(@RequestParam boolean ascending) {
-        return productService.sortProductsByName(ascending);
+    public List<Product> sortProductsByName(
+            @RequestParam boolean ascending,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        return productService.sortProductsByName(ascending, lang);
     }
 
     // Sắp xếp sản phẩm theo giá
     @GetMapping("/sort/price")
-    public List<Product> sortProductsByPrice(@RequestParam boolean ascending) {
-        return productService.sortProductsByPrice(ascending);
+    public List<Product> sortProductsByPrice(
+            @RequestParam boolean ascending,
+            @RequestParam(defaultValue = "vi") String lang
+    ) {
+        return productService.sortProductsByPrice(ascending, lang);
     }
 
     // Thêm sản phẩm mới
