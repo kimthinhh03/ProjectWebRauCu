@@ -1,11 +1,18 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.io.Serializable;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product_translation")
 public class ProductTranslation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,39 +22,11 @@ public class ProductTranslation {
     private String name;
 
 
-    public ProductTranslation() {}
 
-    public ProductTranslation(String masp, String lang, String name) {
-        this.masp = masp;
-        this.lang = lang;
-        this.name = name;
-    }
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "masp", referencedColumnName = "masp", insertable = false, updatable = false)
+    private Product product;
 
-    public Long getId() {
-        return id;
-    }
 
-    public String getMasp() {
-        return masp;
-    }
-
-    public void setMasp(String masp) {
-        this.masp = masp;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -49,6 +49,11 @@ public class Product implements Serializable {
     private Integer stockQuantity;
 
 
-    public Product() {
-    }
+    // Liên kết với bảng sanpham
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "masp", referencedColumnName = "masp", insertable = false, updatable = false)
+    private ProductDetail productDetail;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private java.util.List<ProductTranslation> translations;
 }
+
