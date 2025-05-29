@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-251.25410.129">
+    <data-source name="cdweb@dpg-d0ne9k6uk2gs73bsjta0-a.singapore-postgres.render.com" uuid="b33360ca-ecd6-4c66-8bfc-e0c714f73a4a">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>cdweb_user</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>
