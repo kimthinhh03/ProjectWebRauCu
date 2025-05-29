@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Product;
+import com.example.backend.repository.ProductTranslationRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -24,7 +29,8 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-
+    @Autowired
+    private ProductTranslationRepository productTranslationRepository;
     // Lấy tất cả sản phẩm
     @GetMapping("/all")
     public Page<Product> getAllProducts(
@@ -56,6 +62,22 @@ public class ProductController {
         List<Product> products = productService.getRandomProducts(limit, lang);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(products);
     }
+    // Tạo API lấy danh sách name theo masp[] và lang
+    @GetMapping("/product-names")
+    public List<Map<String, String>> getProductNames(
+            @RequestParam List<String> maspList,
+            @RequestParam String lang) {
+        return productTranslationRepository
+                .findByMaspInAndLang(maspList, lang)
+                .stream()
+                .map(t -> {
+                    Map<String, String> m = new HashMap<>();
+                    m.put("masp", t.getMasp());
+                    m.put("name", t.getName());
+                    return m;
+                })
+                .collect(Collectors.toList());
+    }
 
     // Tìm kiếm sản phẩm theo tên
     @GetMapping("/search")
@@ -78,8 +100,8 @@ public class ProductController {
     // Lọc sản phẩm theo khoảng giá
     @GetMapping("/filter")
     public List<Product> filterProductsByPrice(
-            @RequestParam long minPrice,
-            @RequestParam long maxPrice,
+            @RequestParam Double minPrice,
+            @RequestParam Double maxPrice,
             @RequestParam(defaultValue = "vi") String lang
     ) {
         return productService.filterProductsByPriceRange(minPrice, maxPrice, lang);

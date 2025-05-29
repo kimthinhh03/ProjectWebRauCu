@@ -6,11 +6,9 @@ import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.ProductTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import com.example.backend.utils.VietnameseUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +18,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
     private ProductTranslationRepository translationRepo;
+    @Autowired
+    public ProductService(ProductRepository productRepository,
+                          ProductTranslationRepository translationRepo) {
+        this.productRepository = productRepository;
+        this.translationRepo = translationRepo;
+    }
 
     // Lấy tất cả sản phẩm
     public Page<Product> getAllProducts(Pageable pageable, String lang) {
@@ -62,8 +63,20 @@ public class ProductService {
 
     // Lọc sản phẩm ngẫu nhiên
     public List<Product> getRandomProducts(int limit, String lang) {
-        List<Product> products = productRepository.findRandomProducts(limit);
-        applyTranslations(products, lang);
+        Pageable pageable = PageRequest.of(0, limit);
+        List<Product> products = productRepository.findRandomProducts(pageable);
+
+        // Lọc translation theo lang
+        for (Product product : products) {
+            if (product.getTranslations() != null) {
+                product.setTranslations(
+                        product.getTranslations().stream()
+                                .filter(t -> t.getLang().equalsIgnoreCase(lang))
+                                .toList()
+                );
+            }
+        }
+
         return products;
     }
     // Lọc sản phẩm theo danh mục
@@ -74,7 +87,7 @@ public class ProductService {
     }
 
     // Lọc sản phẩm theo khoảng giá
-    public List<Product> filterProductsByPriceRange(long minPrice, long maxPrice, String lang) {
+    public List<Product> filterProductsByPriceRange(Double minPrice, Double maxPrice, String lang) {
         List<Product> products = productRepository.findByPriceBetween(minPrice, maxPrice);
         applyTranslations(products, lang);
         return products;
@@ -82,12 +95,11 @@ public class ProductService {
 
     // Sắp xếp sản phẩm theo tên
     public List<Product> sortProductsByName(boolean ascending, String lang) {
-        List<Product> products = ascending
-                ? productRepository.findAllByOrderByProductDetail_TenspAsc()
-                : productRepository.findAllByOrderByProductDetail_TenspDesc();
-
-        applyTranslations(products, lang);
-        return products;
+        if (ascending) {
+            return productRepository.findAllOrderByTranslatedNameAsc(lang);
+        } else {
+            return productRepository.findAllOrderByTranslatedNameDesc(lang);
+        }
     }
 
     // Sắp xếp sản phẩm theo giá
